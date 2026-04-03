@@ -1,5 +1,8 @@
 pipeline {
     agent any 
+    triggers {
+        githubPush()
+    }
     parameters {
           string(name: 'NAME', defaultValue: 'Steffi', description: 'type name')
           choice(name: 'ENV',  choices: ['dev','staging','prod'], description: 'select choice')
