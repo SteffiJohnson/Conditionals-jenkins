@@ -5,6 +5,35 @@ pipeline {
           choice(name: 'ENV',  choices: ['dev','staging','prod'], description: 'select choice')
           booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'type bool')
     }
+
+    If branch = main → Production pipeline
+Else → Dev pipeline
+    stages {
+        stage('BRANCH'){
+             steps{
+                 script {
+                    if (env.BRANCH_NAME == 'main'){
+                         echo "Production pipeline"
+                 }
+                    else{
+                         echo "Dev pipeline"
+                 }
+                 }
+             }
+    stages {
+        stage('BUILD'){
+                when { expression { params.ENV == 'dev' }}
+                steps{
+                    echo "Building tests"
+                }
+        }
+    stages {
+        stage('Deploy'){
+                when { expression { params.ENV == 'prod' }}
+                steps{
+                    echo "Deploying tests"
+                }
+        }        
     stages {
         stage('RUN'){
                 when { expression { params.RUN_TESTS }}
